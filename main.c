@@ -1,10 +1,37 @@
 #include<stdio.h>
 #define O 3
+
+typedef struct pobeda{
+	int iks;
+	int oks;
+	int ner;
+}mem;
+
 int provera(int a[O][O]);
 void ispis(int a[O][O],char c[3][3]);
+int unos(FILE *f,mem *m)
+{
+	fscanf(f,"%d%d%d",&(m->iks),&(m->oks),&(m->ner));
+	return !feof(f);
+}
+
 
 main()
 {
+	FILE *f=fopen("partije.txt","r");
+	mem Upis;
+	char yn;
+	unos(f,&Upis);
+	fclose(f);
+	printf("Trenutni rezultati:\n-------\nX = %d\nO = %d\nNereseno = %d\n------\n",Upis.iks,Upis.oks,Upis.ner);
+	printf("Da li zelite da vratite sve rezultate na 0? Y/N?");
+	yn=getchar();
+	if(yn=='y' || yn=='Y')
+	{	putchar('\n');
+		Upis.iks=Upis.oks=Upis.ner=0;
+		printf("Trenutni rezultati nakon restartovanja:\n-------\nX = %d\nO = %d\nNereseno = %d\n------\n",Upis.iks,Upis.oks,Upis.ner);
+	
+	}
 	int x=1;
 	int a[O][O]={{0,0,0},{0,0,0},{0,0,0}},i=0,j=0,potez=0,pobednik=0,polje,zauzeto[]={0,0,0,0,0,0,0,0,0};
 	char c[O][O]={{'-','-','-'},{'-','-','-'},{'-','-','-'}},win,igrac,string[100];
@@ -90,13 +117,24 @@ main()
 	while(potez<9 && pobednik==0);
 		
 		if(pobednik!=0){
-			if(pobednik==1)
+			if(pobednik==1){
+				Upis.iks++;
 				win='x';
-			else win='o';
+			}
+			else{
+				Upis.oks++;
+			 win='o';
+			}
 			printf("Pobednik je %c!",win);
 		}
 		else
+		{
+			Upis.ner++;	
 			printf("NERESENA IGRA");
+		}	
+		f=fopen("partije.txt","w");
+		fprintf(f,"%d %d %d",Upis.iks,Upis.oks,Upis.ner);
+		fclose(f);
 	}
 
 
