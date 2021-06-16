@@ -135,6 +135,8 @@ main()
 		f=fopen("partije.txt","w");
 		fprintf(f,"%d %d %d",Upis.iks,Upis.oks,Upis.ner);
 		fclose(f);
+		
+		system("PAUSE");
 	}
 
 
